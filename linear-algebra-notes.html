@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>特征值、Jordan 理论与谱分解｜线性代数整合笔记</title>
+  <title>特征值、Jordan 理论、谱分解与 SVD｜线性代数整合笔记</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
   <style>
     :root {
@@ -277,7 +277,7 @@
         <div class="brand-logo">Σ</div>
         <div>
           <div class="brand-title">线性代数整合笔记</div>
-          <div class="brand-sub">Eigenvalues · Jordan · Spectra</div>
+          <div class="brand-sub">Eigenvalues · Jordan · Spectra · SVD</div>
         </div>
       </div>
       <div class="search">
@@ -319,8 +319,27 @@
           <a class="nav-link" href="#sec-4-4" data-target="sec-4-4">4.4 谱分解的几何意义</a>
           <a class="nav-link" href="#sec-4-5" data-target="sec-4-5">4.5 Jordan 分解与谱分解的关系</a>
         </div>
+        <div class="nav-group">
+          <div class="nav-group-title">Part V · 奇异值分解 SVD</div>
+          <a class="nav-link" href="#sec-5-1" data-target="sec-5-1">5.1 为什么需要 SVD</a>
+          <a class="nav-link" href="#sec-5-2" data-target="sec-5-2">5.2 SVD 的出发点</a>
+          <a class="nav-link" href="#sec-5-3" data-target="sec-5-3">5.3 奇异值的定义</a>
+          <a class="nav-link" href="#sec-5-4" data-target="sec-5-4">5.4 构造左奇异向量</a>
+          <a class="nav-link" href="#sec-5-5" data-target="sec-5-5">5.5 SVD 公式</a>
+          <a class="nav-link" href="#sec-5-6" data-target="sec-5-6">5.6 SVD 的几何意义</a>
+          <a class="nav-link" href="#sec-5-7" data-target="sec-5-7">5.7 SVD 的本质</a>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title">Part VI · 三种分解的统一视角</div>
+          <a class="nav-link" href="#sec-6-1" data-target="sec-6-1">6.1 三种理论研究的是同一个对象</a>
+          <a class="nav-link" href="#sec-6-2" data-target="sec-6-2">6.2 Jordan 型研究什么</a>
+          <a class="nav-link" href="#sec-6-3" data-target="sec-6-3">6.3 谱分解研究什么</a>
+          <a class="nav-link" href="#sec-6-4" data-target="sec-6-4">6.4 SVD 研究什么</a>
+          <a class="nav-link" href="#sec-6-5" data-target="sec-6-5">6.5 三者的关系</a>
+          <a class="nav-link" href="#sec-6-6" data-target="sec-6-6">6.6 最核心的总结</a>
+        </div>
       </nav>
-      <div class="sidebar-footer">作者 Joshua · 2026年9月10日 · 整合自 3 篇 ChatGPT 笔记</div>
+      <div class="sidebar-footer">作者 Joshua · 2026年9月10日 · 整合自多篇 ChatGPT 笔记</div>
     </aside>
     <div class="scrim" id="scrim"></div>
 
@@ -328,8 +347,8 @@
       <div class="page">
         <section class="hero">
           <div class="hero-kicker">Linear Algebra · 整合笔记</div>
-          <h1 class="hero-title">特征值、Jordan 理论与谱分解</h1>
-          <p class="hero-sub">从线性变换与换基出发，贯通特征值、代数 / 几何重数、Jordan 标准形，直至正规矩阵的谱分解。</p>
+          <h1 class="hero-title">特征值、Jordan 理论、谱分解与 SVD</h1>
+          <p class="hero-sub">从线性变换与换基出发，贯通特征值、代数 / 几何重数、Jordan 标准形、正规矩阵的谱分解，直至奇异值分解（SVD），并比较三者的统一关系。</p>
           <div class="flow">
             <span class="flow-item">线性变换与换基</span>
             <span class="flow-arrow">→</span>
@@ -340,11 +359,15 @@
             <span class="flow-item">Jordan 理论</span>
             <span class="flow-arrow">→</span>
             <span class="flow-item">谱分解</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-item">SVD</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-item">三种分解统一视角</span>
           </div>
           <div class="hero-meta">
             <span>作者：Joshua</span>
             <span>更新时间：2026年9月10日</span>
-            <span>三篇笔记整合</span>
+            <span>多篇笔记整合</span>
           </div>
         </section>
 
@@ -368,6 +391,16 @@
             <div class="overview-num">PART IV</div>
             <div class="overview-title">正规矩阵与谱分解</div>
             <p class="overview-desc">正规矩阵、谱定理与谱分解的几何意义。</p>
+          </a>
+          <a class="overview-card" href="#part-5">
+            <div class="overview-num">PART V</div>
+            <div class="overview-title">奇异值分解 SVD</div>
+            <p class="overview-desc">奇异值、左奇异向量、SVD 公式及其几何意义。</p>
+          </a>
+          <a class="overview-card" href="#part-6">
+            <div class="overview-num">PART VI</div>
+            <div class="overview-title">三种分解的统一视角</div>
+            <p class="overview-desc">Jordan、谱分解与 SVD 的研究对象、差异与联系。</p>
           </a>
         </div>
 
@@ -702,8 +735,232 @@
           </section>
         </section>
 
+        <section class="part" id="part-5">
+          <div class="part-heading">
+            <span class="part-badge">Part V</span>
+            <h1>奇异值分解（SVD）</h1>
+          </div>
+          <p class="part-lead">谱分解只适用于正规矩阵；SVD 则把类似的分解推广到任意矩阵。</p>
+
+          <section class="chapter" id="sec-5-1">
+            <h2>5.1 为什么需要 SVD</h2>
+            <p>对于正规矩阵，可以进行谱分解：</p>
+            <div class="math">$$A=Q\Lambda Q^*,$$</div>
+            <p>其中</p>
+            <div class="math">$$Q^*Q=I,\qquad \Lambda=\operatorname{diag}(\lambda_1,\cdots,\lambda_n).$$</div>
+            <p>谱分解的前提是矩阵具有足够好的性质（正规矩阵）。</p>
+            <p>对于一般矩阵</p>
+            <div class="math">$$A=\begin{bmatrix}1&amp;1\\0&amp;1\end{bmatrix},$$</div>
+            <p>可能不存在正交特征向量组，因此无法进行谱分解。</p>
+            <p>于是产生问题：</p>
+            <div class="conclusion">任意矩阵是否存在类似谱分解的结构？</div>
+            <p>答案是：</p>
+            <div class="math">$$\boxed{A=U\Sigma V^*}.$$</div>
+            <p>这就是奇异值分解（Singular Value Decomposition，SVD）。</p>
+          </section>
+
+          <section class="chapter" id="sec-5-2">
+            <h2>5.2 SVD 的出发点</h2>
+            <p>考虑矩阵 \(A^*A\)。首先</p>
+            <div class="math">$$(A^*A)^*=A^*A,$$</div>
+            <p>因此 \(A^*A\) 一定是 Hermite 矩阵。</p>
+            <p>其次</p>
+            <div class="math">$$x^*A^*Ax=(Ax)^*(Ax)=\|Ax\|^2\ge 0,$$</div>
+            <p>因此 \(A^*A\) 一定是半正定矩阵。</p>
+            <p>于是根据谱定理：</p>
+            <div class="math">$$A^*A=V\Lambda V^*,$$</div>
+            <p>其中</p>
+            <div class="math">$$V=[v_1,\cdots,v_n]$$</div>
+            <p>为正交归一特征向量组。对应特征值</p>
+            <div class="math">$$\Lambda=\operatorname{diag}(\lambda_1,\cdots,\lambda_n)$$</div>
+            <p>满足 \(\lambda_i\ge 0\)。</p>
+          </section>
+
+          <section class="chapter" id="sec-5-3">
+            <h2>5.3 奇异值的定义</h2>
+            <p>定义</p>
+            <div class="math">$$\boxed{\sigma_i=\sqrt{\lambda_i(A^*A)}},$$</div>
+            <p>称为矩阵 \(A\) 的<strong>奇异值</strong>。</p>
+            <p>记</p>
+            <div class="math">$$\Sigma=\operatorname{diag}(\sigma_1,\cdots,\sigma_n),$$</div>
+            <p>则有</p>
+            <div class="math">$$\Lambda=\Sigma^2.$$</div>
+          </section>
+
+          <section class="chapter" id="sec-5-4">
+            <h2>5.4 构造左奇异向量</h2>
+            <p>由</p>
+            <div class="math">$$A^*Av_i=\sigma_i^2v_i,$$</div>
+            <p>可得</p>
+            <div class="math">$$\|Av_i\|^2=v_i^*A^*Av_i=\sigma_i^2.$$</div>
+            <p>因此 \(Av_i\) 的长度恰好等于 \(\sigma_i\)。</p>
+            <p>定义</p>
+            <div class="math">$$u_i=\frac{Av_i}{\sigma_i},$$</div>
+            <p>则 \(\|u_i\|=1\)。这些向量称为<strong>左奇异向量</strong>。</p>
+            <p>将所有左奇异向量组成矩阵：</p>
+            <div class="math">$$U=[u_1,\cdots,u_m].$$</div>
+          </section>
+
+          <section class="chapter" id="sec-5-5">
+            <h2>5.5 SVD 公式</h2>
+            <p>由</p>
+            <div class="math">$$Av_i=\sigma_i u_i,$$</div>
+            <p>写成矩阵形式：</p>
+            <div class="math">$$AV=U\Sigma.$$</div>
+            <p>两边右乘 \(V^*\) 得到：</p>
+            <div class="math">$$\boxed{A=U\Sigma V^*}.$$</div>
+            <p>这就是奇异值分解。</p>
+          </section>
+
+          <section class="chapter" id="sec-5-6">
+            <h2>5.6 SVD 的几何意义</h2>
+            <p>对于任意向量 \(x\)，有</p>
+            <div class="math">$$Ax=U\Sigma V^*x.$$</div>
+            <p>因此矩阵作用可分解为三个步骤：</p>
+            <p>第一步：\(V^*\) 把向量变换到右奇异向量坐标系。</p>
+            <p>第二步：\(\Sigma\) 沿各个奇异方向独立伸缩：</p>
+            <div class="math">$$(y_1,\cdots,y_n)\mapsto(\sigma_1y_1,\cdots,\sigma_ny_n).$$</div>
+            <p>第三步：\(U\) 将结果旋转到输出空间。</p>
+            <p>因此：</p>
+            <div class="conclusion">任意矩阵 = 旋转 + 伸缩 + 旋转</div>
+          </section>
+
+          <section class="chapter" id="sec-5-7">
+            <h2>5.7 SVD 的本质</h2>
+            <p>特征值研究</p>
+            <div class="math">$$Av=\lambda v,$$</div>
+            <p>关注：哪些方向作用后仍保持原方向。</p>
+            <p>SVD 研究</p>
+            <div class="math">$$\|Ax\|,$$</div>
+            <p>关注：哪些方向被拉伸得最多或最少。</p>
+            <p>因此：</p>
+            <div class="conclusion">特征值 = 特征方向上的伸缩倍数</div>
+            <div class="conclusion">奇异值 = 长度的伸缩倍数</div>
+          </section>
+        </section>
+
+        <section class="part" id="part-6">
+          <div class="part-heading">
+            <span class="part-badge">Part VI</span>
+            <h1>三种分解的统一视角</h1>
+          </div>
+          <p class="part-lead">Jordan、谱分解与 SVD 研究的是同一个线性变换，只是切入角度不同。</p>
+
+          <section class="chapter" id="sec-6-1">
+            <h2>6.1 三种理论研究的是同一个对象</h2>
+            <p>三者都在研究</p>
+            <div class="math">$$A:\mathbb C^n\to\mathbb C^n,$$</div>
+            <p>这个线性变换。区别在于研究角度不同。</p>
+          </section>
+
+          <section class="chapter" id="sec-6-2">
+            <h2>6.2 Jordan 型研究什么</h2>
+            <p>Jordan 理论从特征值问题出发：</p>
+            <div class="math">$$Av=\lambda v.$$</div>
+            <p>如果特征向量不足：</p>
+            <div class="math">$$(A-\lambda I)v_2=v_1,$$</div>
+            <p>继续构造：</p>
+            <div class="math">$$(A-\lambda I)v_3=v_2,$$</div>
+            <p>形成 Jordan 链。</p>
+            <p>最终得到：</p>
+            <div class="math">$$A=PJP^{-1}.$$</div>
+            <p>其中</p>
+            <div class="math">$$J=\begin{bmatrix}J_{k_1}(\lambda_1)&amp;&amp;\\&amp;\ddots&amp;\\&amp;&amp;J_{k_r}(\lambda_r)\end{bmatrix}.$$</div>
+            <p>Jordan 理论回答的问题：</p>
+            <div class="conclusion">矩阵内部有哪些特征方向？</div>
+            <div class="conclusion">这些方向之间如何耦合？</div>
+            <p>Jordan 块中的 \(1\) 正是方向耦合的信息。例如</p>
+            <div class="math">$$\begin{bmatrix}\lambda&amp;1\\0&amp;\lambda\end{bmatrix}$$</div>
+            <p>表示</p>
+            <div class="math">$$v_2\rightarrow v_1\rightarrow 0.$$</div>
+            <p>因此：</p>
+            <div class="conclusion">Jordan 型描述矩阵的代数结构</div>
+          </section>
+
+          <section class="chapter" id="sec-6-3">
+            <h2>6.3 谱分解研究什么</h2>
+            <p>如果矩阵进一步满足正规条件：</p>
+            <div class="math">$$AA^*=A^*A,$$</div>
+            <p>则存在正交归一特征向量组。</p>
+            <p>此时：</p>
+            <div class="math">$$A=Q\Lambda Q^*.$$</div>
+            <p>矩阵作用过程：</p>
+            <div class="math">$$x \xrightarrow{Q^*} y \xrightarrow{\Lambda} \Lambda y \xrightarrow{Q} Ax.$$</div>
+            <p>因此谱分解描述：</p>
+            <div class="conclusion">沿特征方向如何伸缩</div>
+            <p>与 Jordan 相比：Jordan 中的坐标系 \(P\) 通常不是正交的。</p>
+            <p>谱分解中的坐标系 \(Q\) 是正交（酉）矩阵。</p>
+            <p>因此：</p>
+            <div class="conclusion">谱分解是 Jordan 理论在正规矩阵上的理想情况</div>
+          </section>
+
+          <section class="chapter" id="sec-6-4">
+            <h2>6.4 SVD 研究什么</h2>
+            <p>对于一般矩阵，谱分解可能不存在。</p>
+            <p>但 \(A^*A\) 一定是 Hermite 半正定矩阵，因此一定可以谱分解：</p>
+            <div class="math">$$A^*A=V\Sigma^2V^*.$$</div>
+            <p>进而得到：</p>
+            <div class="math">$$A=U\Sigma V^*.$$</div>
+            <p>SVD 不再研究 \(Av=\lambda v\)，而研究</p>
+            <div class="math">$$\|Ax\|.$$</div>
+            <p>它回答的问题是：</p>
+            <div class="conclusion">哪些方向被拉伸得最多？拉伸倍数是多少？</div>
+            <p>因此：</p>
+            <div class="conclusion">SVD 描述矩阵的几何伸缩结构</div>
+          </section>
+
+          <section class="chapter" id="sec-6-5">
+            <h2>6.5 三者的关系</h2>
+            <p>Jordan：</p>
+            <div class="math">$$A=PJP^{-1},$$</div>
+            <p>研究矩阵本身。</p>
+            <p>谱分解：</p>
+            <div class="math">$$A=Q\Lambda Q^*,$$</div>
+            <p>研究正规矩阵的特征方向。</p>
+            <p>SVD：</p>
+            <div class="math">$$A=U\Sigma V^*,$$</div>
+            <p>研究任意矩阵的长度伸缩。</p>
+            <p>关系图：</p>
+            <div class="conclusion">Jordan \(\supset\) 谱分解</div>
+            <p>因为谱分解只适用于正规矩阵。</p>
+            <p>另一条路线：</p>
+            <div class="conclusion">任意矩阵 \(\Longrightarrow\) SVD</div>
+            <p>结构图：</p>
+            <div class="math">$$
+\begin{array}{ccc}
+ &amp; \text{任意矩阵 } A &amp; \\
+\downarrow &amp; &amp; \downarrow \\
+\text{Jordan 理论} &amp; &amp; \text{SVD 理论} \\
+\downarrow &amp; &amp; \downarrow \\
+\text{研究 } A &amp; &amp; \text{研究 } A^*A \\
+\downarrow &amp; &amp; \downarrow \\
+\text{特征值} &amp; &amp; \text{奇异值}
+\end{array}
+$$</div>
+          </section>
+
+          <section class="chapter" id="sec-6-6">
+            <h2>6.6 最核心的总结</h2>
+            <div class="conclusion">Jordan 看方向之间如何耦合</div>
+            <div class="conclusion">谱分解看特征方向上的伸缩</div>
+            <div class="conclusion">SVD 看长度被拉伸多少</div>
+            <p>因此可以把整条主线记为：</p>
+            <div class="flow" style="justify-content: center;">
+              <span class="flow-item">线性变换</span><span class="flow-arrow">→</span>
+              <span class="flow-item">特征值</span><span class="flow-arrow">→</span>
+              <span class="flow-item">Jordan 型</span><span class="flow-arrow">→</span>
+              <span class="flow-item">正规矩阵</span><span class="flow-arrow">→</span>
+              <span class="flow-item">谱分解</span><span class="flow-arrow">→</span>
+              <span class="flow-item">正定矩阵</span><span class="flow-arrow">→</span>
+              <span class="flow-item">奇异值</span><span class="flow-arrow">→</span>
+              <span class="flow-item">SVD</span>
+            </div>
+            <p>三者并不是彼此独立的理论，而是在不同条件下，对同一个线性变换进行的不同层次的解析。</p>
+          </section>
+        </section>
+
         <footer class="page-footer">
-          <p>本笔记整合自以下三篇 ChatGPT 笔记：</p>
+          <p>本笔记整合自以下 ChatGPT 笔记：</p>
           <ol>
             <li><a href="https://chatgpt.com/s/t_6aa223b05e348191a0d882221b718553" target="_blank" rel="noreferrer">Jordan 理论前置知识笔记（特征值 → 重数 → 广义特征向量 → Jordan 链）</a></li>
             <li><a href="https://chatgpt.com/s/t_6aa2456564288191b104ca244de48dc8" target="_blank" rel="noreferrer">Jordan 理论笔记</a></li>
