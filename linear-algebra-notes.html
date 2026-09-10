@@ -211,6 +211,39 @@
       font-size: 16px;
     }
 
+    .changelog {
+      margin: 0 0 8px;
+      padding-left: 28px;
+      border-left: 2px solid #e5e7eb;
+    }
+    .changelog-item {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .changelog-item::before {
+      content: "";
+      position: absolute;
+      left: -33px;
+      top: 5px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px #eef2ff;
+    }
+    .changelog-date {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      margin-bottom: 3px;
+    }
+    .changelog-content {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink);
+    }
+
     .page-footer {
       margin-top: 40px;
       padding-top: 24px;
@@ -284,6 +317,10 @@
         <input id="tocSearch" type="text" placeholder="搜索目录…" />
       </div>
       <nav class="toc" id="toc">
+        <div class="nav-group">
+          <div class="nav-group-title">更新日志</div>
+          <a class="nav-link" href="#changelog" data-target="changelog">更新日志</a>
+        </div>
         <div class="nav-group">
           <div class="nav-group-title">Part I · 线性变换与相似</div>
           <a class="nav-link" href="#sec-1-1" data-target="sec-1-1">1.1 线性变换与矩阵</a>
@@ -403,6 +440,31 @@
             <p class="overview-desc">Jordan、谱分解与 SVD 的研究对象、差异与联系。</p>
           </a>
         </div>
+
+        <section class="part" id="part-0">
+          <div class="part-heading">
+            <span class="part-badge">Updates</span>
+            <h1>更新日志</h1>
+          </div>
+          <p class="part-lead">这里记录本笔记每次内容更新的时间和改动。</p>
+
+          <section class="chapter" id="changelog">
+            <div class="changelog">
+              <div class="changelog-item">
+                <div class="changelog-date">2026-09-10 21:47</div>
+                <div class="changelog-content">新增“更新日志”版块，后续每次更新将在此记录内容与时间。</div>
+              </div>
+              <div class="changelog-item">
+                <div class="changelog-date">2026-09-10 21:44</div>
+                <div class="changelog-content">新增 Part V 奇异值分解（SVD）与 Part VI 三种分解的统一视角，并同步更新目录、概览卡片和主线流程。</div>
+              </div>
+              <div class="changelog-item">
+                <div class="changelog-date">2026-09-10 19:35</div>
+                <div class="changelog-content">创建整合笔记，包含 Part I 线性变换与相似、Part II 特征值与重数、Part III Jordan 理论、Part IV 正规矩阵与谱分解。</div>
+              </div>
+            </div>
+          </section>
+        </section>
 
         <section class="part" id="part-1">
           <div class="part-heading">
