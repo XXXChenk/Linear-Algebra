@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>特征值、Jordan 理论与谱分解｜线性代数整合笔记</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <style>
+    :root {
+      --sidebar-bg: #f6f7f9;
+      --sidebar-border: #e6e8ec;
+      --main-bg: #ffffff;
+      --ink: #1f2328;
+      --muted: #667085;
+      --accent: #4f46e5;
+      --accent-strong: #4338ca;
+      --accent-soft: #eef2ff;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+      color: var(--ink);
+      background: var(--main-bg);
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      z-index: 100;
+      transition: width 0.08s linear;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      width: 300px;
+      flex: 0 0 300px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 40;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 20px 20px 16px; }
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+    .brand-title { font-size: 15px; font-weight: 700; line-height: 1.3; }
+    .brand-sub { font-size: 12px; color: var(--muted); }
+
+    .search { padding: 0 16px 14px; }
+    .search input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--sidebar-border);
+      border-radius: 8px;
+      font-size: 13px;
+      background: #fff;
+      color: var(--ink);
+      outline: none;
+    }
+    .search input:focus { border-color: var(--accent); }
+
+    .toc { flex: 1; padding: 0 10px 24px; }
+    .nav-group { margin-bottom: 8px; }
+    .nav-group-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 10px 12px 4px;
+    }
+    .nav-link {
+      display: block;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      color: #384252;
+      margin: 1px 0;
+    }
+    .nav-link:hover { background: #eceff3; color: var(--ink); }
+    .nav-link.active { background: var(--accent-soft); color: var(--accent-strong); font-weight: 600; }
+    .sidebar-footer {
+      padding: 14px 20px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--sidebar-border);
+    }
+
+    .content { flex: 1; min-width: 0; }
+    .page { max-width: 840px; margin: 0 auto; padding: 56px 44px 120px; }
+
+    .hero { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--sidebar-border); }
+    .hero-kicker {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .hero-title { font-size: 38px; line-height: 1.2; margin: 0 0 14px; letter-spacing: -0.01em; }
+    .hero-sub { font-size: 16px; color: var(--muted); margin: 0 0 22px; max-width: 660px; }
+    .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 22px; }
+    .flow-item {
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      border: 1px solid #e0e7ff;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .flow-arrow { color: #9ca3af; }
+    .hero-meta { display: flex; gap: 18px; font-size: 13px; color: var(--muted); }
+
+    .overview { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 52px; }
+    .overview-card {
+      border: 1px solid var(--sidebar-border);
+      border-radius: var(--radius);
+      padding: 17px 19px;
+      background: #fff;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+    .overview-card:hover {
+      border-color: #c7d2fe;
+      box-shadow: 0 8px 24px rgba(79, 70, 229, 0.08);
+      text-decoration: none;
+    }
+    .overview-num { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.05em; }
+    .overview-title { font-size: 16px; font-weight: 700; color: var(--ink); margin: 4px 0 4px; }
+    .overview-desc { font-size: 13px; color: var(--muted); margin: 0; }
+
+    .part { margin-bottom: 58px; scroll-margin-top: 24px; }
+    .part-heading { display: flex; align-items: center; gap: 12px; margin: 0 0 8px; }
+    .part-badge {
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      padding: 4px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+    }
+    .part-heading h1 { font-size: 28px; margin: 0; }
+    .part-lead { color: var(--muted); font-size: 15px; margin: 0 0 30px; }
+
+    .chapter { margin: 0 0 36px; scroll-margin-top: 24px; }
+    .chapter h2 {
+      font-size: 22px;
+      margin: 0 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--sidebar-border);
+      scroll-margin-top: 24px;
+    }
+    .chapter h3 { font-size: 17px; margin: 22px 0 8px; }
+    .chapter p { margin: 0 0 14px; }
+    .chapter ul, .chapter ol { margin: 0 0 14px; padding-left: 24px; }
+    .chapter li { margin: 4px 0; }
+    .math { margin: 18px 0; text-align: center; overflow-x: auto; padding: 4px 0; }
+
+    .callout {
+      border-left: 4px solid;
+      border-radius: 0 10px 10px 0;
+      padding: 13px 17px;
+      margin: 20px 0;
+      background: #fff;
+    }
+    .callout .callout-title { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+    .callout p { margin: 0 0 6px; }
+    .callout p:last-child { margin-bottom: 0; }
+    .callout .math { margin: 10px 0; }
+    .callout.definition { border-color: #4f46e5; background: #f8f9ff; }
+    .callout.example { border-color: #10b981; background: #f2fbf8; }
+    .callout.insight { border-color: #f59e0b; background: #fffaf0; }
+    .callout.warning { border-color: #ef4444; background: #fff5f5; }
+    .callout.theorem { border-color: #8b5cf6; background: #faf7ff; }
+
+    .conclusion {
+      margin: 20px 0;
+      text-align: center;
+      font-weight: 700;
+      color: var(--accent-strong);
+      font-size: 16px;
+    }
+
+    .page-footer {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--sidebar-border);
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .page-footer a { color: var(--accent); }
+    .muted { color: #9ca3af; }
+
+    .to-top {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--sidebar-border);
+      background: #fff;
+      color: var(--accent);
+      font-size: 18px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      z-index: 50;
+    }
+    .to-top.show { opacity: 1; pointer-events: auto; }
+
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 60;
+      background: #fff;
+      border: 1px solid var(--sidebar-border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .scrim { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.35); z-index: 35; }
+
+    @media (max-width: 900px) {
+      .sidebar { position: fixed; left: -300px; transition: left 0.25s ease; }
+      .sidebar.open { left: 0; }
+      .menu-toggle { display: block; }
+      .scrim.show { display: block; }
+      .page { padding: 48px 20px 100px; }
+      .hero-title { font-size: 30px; }
+      .overview { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+  <button class="menu-toggle" id="menuToggle" aria-label="目录">☰</button>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-logo">Σ</div>
+        <div>
+          <div class="brand-title">线性代数整合笔记</div>
+          <div class="brand-sub">Eigenvalues · Jordan · Spectra</div>
+        </div>
+      </div>
+      <div class="search">
+        <input id="tocSearch" type="text" placeholder="搜索目录…" />
+      </div>
+      <nav class="toc" id="toc">
+        <div class="nav-group">
+          <div class="nav-group-title">Part I · 线性变换与相似</div>
+          <a class="nav-link" href="#sec-1-1" data-target="sec-1-1">1.1 线性变换与矩阵</a>
+          <a class="nav-link" href="#sec-1-2" data-target="sec-1-2">1.2 换基与坐标</a>
+          <a class="nav-link" href="#sec-1-3" data-target="sec-1-3">1.3 同一个矩阵的两种身份</a>
+          <a class="nav-link" href="#sec-1-4" data-target="sec-1-4">1.4 相似变换</a>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title">Part II · 特征值与重数</div>
+          <a class="nav-link" href="#sec-2-1" data-target="sec-2-1">2.1 特征值与特征向量</a>
+          <a class="nav-link" href="#sec-2-2" data-target="sec-2-2">2.2 简并特征值与代数重数</a>
+          <a class="nav-link" href="#sec-2-3" data-target="sec-2-3">2.3 特征空间与几何重数</a>
+          <a class="nav-link" href="#sec-2-4" data-target="sec-2-4">2.4 两种重数的关系与可对角化</a>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title">Part III · Jordan 理论</div>
+          <a class="nav-link" href="#sec-3-1" data-target="sec-3-1">3.1 为什么要 Jordan 理论</a>
+          <a class="nav-link" href="#sec-3-2" data-target="sec-3-2">3.2 剥离伸缩部分 N = A − λI</a>
+          <a class="nav-link" href="#sec-3-3" data-target="sec-3-3">3.3 普通特征向量</a>
+          <a class="nav-link" href="#sec-3-4" data-target="sec-3-4">3.4 广义特征向量</a>
+          <a class="nav-link" href="#sec-3-5" data-target="sec-3-5">3.5 Jordan 链</a>
+          <a class="nav-link" href="#sec-3-6" data-target="sec-3-6">3.6 Jordan 块</a>
+          <a class="nav-link" href="#sec-3-7" data-target="sec-3-7">3.7 直和</a>
+          <a class="nav-link" href="#sec-3-8" data-target="sec-3-8">3.8 例子：两个 Jordan 块</a>
+          <a class="nav-link" href="#sec-3-9" data-target="sec-3-9">3.9 重数与 Jordan 块的对应</a>
+          <a class="nav-link" href="#sec-3-10" data-target="sec-3-10">3.10 主线总结</a>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title">Part IV · 正规矩阵与谱分解</div>
+          <a class="nav-link" href="#sec-4-1" data-target="sec-4-1">4.1 正规矩阵</a>
+          <a class="nav-link" href="#sec-4-2" data-target="sec-4-2">4.2 为什么正规矩阵没有 Jordan 块</a>
+          <a class="nav-link" href="#sec-4-3" data-target="sec-4-3">4.3 谱定理</a>
+          <a class="nav-link" href="#sec-4-4" data-target="sec-4-4">4.4 谱分解的几何意义</a>
+          <a class="nav-link" href="#sec-4-5" data-target="sec-4-5">4.5 Jordan 分解与谱分解的关系</a>
+        </div>
+      </nav>
+      <div class="sidebar-footer">作者 Joshua · 2026年9月10日 · 整合自 3 篇 ChatGPT 笔记</div>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+
+    <main class="content">
+      <div class="page">
+        <section class="hero">
+          <div class="hero-kicker">Linear Algebra · 整合笔记</div>
+          <h1 class="hero-title">特征值、Jordan 理论与谱分解</h1>
+          <p class="hero-sub">从线性变换与换基出发，贯通特征值、代数 / 几何重数、Jordan 标准形，直至正规矩阵的谱分解。</p>
+          <div class="flow">
+            <span class="flow-item">线性变换与换基</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-item">特征值与重数</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-item">对角化</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-item">Jordan 理论</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-item">谱分解</span>
+          </div>
+          <div class="hero-meta">
+            <span>作者：Joshua</span>
+            <span>更新时间：2026年9月10日</span>
+            <span>三篇笔记整合</span>
+          </div>
+        </section>
+
+        <div class="overview">
+          <a class="overview-card" href="#part-1">
+            <div class="overview-num">PART I</div>
+            <div class="overview-title">线性变换与相似</div>
+            <p class="overview-desc">线性变换、矩阵列向量、换基与坐标、相似变换。</p>
+          </a>
+          <a class="overview-card" href="#part-2">
+            <div class="overview-num">PART II</div>
+            <div class="overview-title">特征值与重数</div>
+            <p class="overview-desc">特征值、代数重数、几何重数与可对角化条件。</p>
+          </a>
+          <a class="overview-card" href="#part-3">
+            <div class="overview-num">PART III</div>
+            <div class="overview-title">Jordan 理论</div>
+            <p class="overview-desc">N = A − λI、广义特征向量、Jordan 链与 Jordan 块。</p>
+          </a>
+          <a class="overview-card" href="#part-4">
+            <div class="overview-num">PART IV</div>
+            <div class="overview-title">正规矩阵与谱分解</div>
+            <p class="overview-desc">正规矩阵、谱定理与谱分解的几何意义。</p>
+          </a>
+        </div>
+
+        <section class="part" id="part-1">
+          <div class="part-heading">
+            <span class="part-badge">Part I</span>
+            <h1>线性变换与相似</h1>
+          </div>
+          <p class="part-lead">一切分解的基础：先厘清矩阵到底是“变换”还是“换基”。</p>
+
+          <section class="chapter" id="sec-1-1">
+            <h2>1.1 线性变换与矩阵</h2>
+            <p>设线性变换 \(T:V\to V\) 在标准基 \(E=\{e_1,e_2,\dots,e_n\}\) 下的矩阵表示为 \(A\)，即</p>
+            <div class="math">$$T(x)=Ax.$$</div>
+            <p>例如 \(A=\begin{bmatrix}0&amp;1\\-1&amp;0\end{bmatrix}\)。对任意向量 \(x=\begin{bmatrix}x\\y\end{bmatrix}\)，有</p>
+            <div class="math">$$Ax=\begin{bmatrix}-y\\x\end{bmatrix},$$</div>
+            <p>其几何意义是：<strong>逆时针旋转 \(90^\circ\)</strong>。</p>
+            <p>矩阵列向量的意义：</p>
+            <div class="math">$$A=\begin{bmatrix}Ae_1 &amp; Ae_2 &amp; \cdots &amp; Ae_n\end{bmatrix},$$</div>
+            <p>即：<strong>矩阵的第 \(i\) 列 = 第 \(i\) 个基向量经过变换后的结果</strong>。例如</p>
+            <div class="math">$$Ae_1=\begin{bmatrix}0\\1\end{bmatrix},\qquad Ae_2=\begin{bmatrix}-1\\0\end{bmatrix}.$$</div>
+          </section>
+
+          <section class="chapter" id="sec-1-2">
+            <h2>1.2 换基与坐标</h2>
+            <p>设有另一组基 \(F=\{f_1,f_2,\dots,f_n\}\)，将其在旧基 \(E\) 下的坐标按列排列：</p>
+            <div class="math">$$Q=\begin{bmatrix}f_1 &amp; f_2 &amp; \cdots &amp; f_n\end{bmatrix}.$$</div>
+            <div class="callout warning">
+              <div class="callout-title">注意</div>
+              <p>\(Q\) 的列向量是<strong>新基在旧基下的坐标</strong>。</p>
+            </div>
+            <p>例如 \(f_1=\begin{bmatrix}1\\1\end{bmatrix},\ f_2=\begin{bmatrix}1\\-1\end{bmatrix}\)，则</p>
+            <div class="math">$$Q=\begin{bmatrix}1&amp;1\\1&amp;-1\end{bmatrix}.$$</div>
+            <p>若 \([x]_F=\begin{bmatrix}a\\b\end{bmatrix}\) 表示 \(x=af_1+bf_2\)，则</p>
+            <div class="math">$$[x]_E=Q[x]_F,$$</div>
+            <p>反之</p>
+            <div class="math">$$[x]_F=Q^{-1}[x]_E.$$</div>
+            <p>理解：\(Q\) 负责“新基坐标 → 旧基坐标”，\(Q^{-1}\) 负责“旧基坐标 → 新基坐标”。</p>
+          </section>
+
+          <section class="chapter" id="sec-1-3">
+            <h2>1.3 同一个矩阵的两种身份</h2>
+            <p>同一个矩阵 \(Q\) 可以有两种身份。</p>
+            <h3>身份 1：线性变换矩阵</h3>
+            <p>例如 \(Q=\begin{bmatrix}0&amp;1\\-1&amp;0\end{bmatrix}\)，此时</p>
+            <div class="math">$$Q[x]_E=[Qx]_E,$$</div>
+            <p>表示：向量被旋转 \(90^\circ\)。</p>
+            <h3>身份 2：换基矩阵</h3>
+            <p>若定义 \(f_1=\begin{bmatrix}0\\1\end{bmatrix},\ f_2=\begin{bmatrix}-1\\0\end{bmatrix}\)，则 \(Q=[f_1\ f_2]\)，又满足</p>
+            <div class="math">$$Q[x]_F=[x]_E,$$</div>
+            <p>表示：坐标表示发生变化。</p>
+            <div class="callout insight">
+              <div class="callout-title">关键理解</div>
+              <p>矩阵本身不会告诉你“我是线性变换还是换基矩阵”，区别来自<strong>输入和输出被解释成什么</strong>：解释成向量就是线性变换，解释成坐标就是换基。</p>
+            </div>
+          </section>
+
+          <section class="chapter" id="sec-1-4">
+            <h2>1.4 相似变换</h2>
+            <p>设线性变换 \(T\) 在旧基 \(E\) 下矩阵为 \(A\)（\([T]_E=A\)），换到新基 \(F\) 后为 \([T]_F=B\)，则</p>
+            <div class="math">$$B=Q^{-1}AQ.$$</div>
+            <p>推导流程：</p>
+            <div class="math">$$[x]_F \xrightarrow{Q} [x]_E \xrightarrow{A} [Tx]_E \xrightarrow{Q^{-1}} [Tx]_F.$$</div>
+            <p>所以 \(B=Q^{-1}AQ\)。本质：<strong>\(A\) 与 \(B\) 表示同一个线性变换，只是基不同</strong>。</p>
+          </section>
+        </section>
+
+        <section class="part" id="part-2">
+          <div class="part-heading">
+            <span class="part-badge">Part II</span>
+            <h1>特征值与重数</h1>
+          </div>
+          <p class="part-lead">理解“可对角化”的定量条件，是进入 Jordan 理论的钥匙。</p>
+
+          <section class="chapter" id="sec-2-1">
+            <h2>2.1 特征值与特征向量</h2>
+            <p>对矩阵 \(A\)，若存在非零向量 \(v\) 满足</p>
+            <div class="math">$$Av=\lambda v,$$</div>
+            <p>则称：\(\lambda\) 为<strong>特征值（Eigenvalue）</strong>，\(v\) 为对应<strong>特征向量（Eigenvector）</strong>。等价写法：</p>
+            <div class="math">$$(A-\lambda I)v=0,$$</div>
+            <p>因此特征值满足</p>
+            <div class="math">$$\det(A-\lambda I)=0.$$</div>
+            <div class="callout insight">
+              <div class="callout-title">特征向量的本质</div>
+              <p>矩阵作用后<strong>方向保持不变，仅发生伸缩</strong>。例如 \(Av=2v\)，则 \(A^kv=2^kv\)，无论作用多少次都始终在同一条直线上。因此，特征向量是在寻找<strong>被矩阵保留下来的方向</strong>。</p>
+            </div>
+          </section>
+
+          <section class="chapter" id="sec-2-2">
+            <h2>2.2 简并特征值与代数重数</h2>
+            <p>若特征值重复出现，则称为<strong>简并特征值</strong>。例如</p>
+            <div class="math">$$\det(\lambda I-A)=(\lambda-2)^2(\lambda-3),$$</div>
+            <p>则 \(\lambda=2\) 出现两次，称为<strong>二重简并特征值</strong>。</p>
+            <div class="callout definition">
+              <div class="callout-title">代数重数（Algebraic Multiplicity）</div>
+              <p>特征值作为特征方程根出现的次数，记作 \(a(\lambda)\)。</p>
+            </div>
+            <p>例如</p>
+            <div class="math">$$(\lambda-2)^3(\lambda-5)^2,$$</div>
+            <p>则 \(a(2)=3,\ a(5)=2\)。代数重数来自 \(\det(A-\lambda I)\) 的因式分解。</p>
+          </section>
+
+          <section class="chapter" id="sec-2-3">
+            <h2>2.3 特征空间与几何重数</h2>
+            <p>对特征值 \(\lambda\)：</p>
+            <div class="math">$$E_\lambda=\ker(A-\lambda I)$$</div>
+            <p>称为<strong>特征空间</strong>，即所有满足 \((A-\lambda I)x=0\) 的向量组成的空间。</p>
+            <div class="callout definition">
+              <div class="callout-title">几何重数（Geometric Multiplicity）</div>
+              <div class="math">$$g(\lambda)=\dim E_\lambda=\dim\ker(A-\lambda I).$$</div>
+              <p>即：<strong>线性无关特征向量的个数</strong>。</p>
+            </div>
+            <p>注意：不是特征向量的个数，因为 \(v,2v,3v\) 实际上是同一个方向。几何重数统计的是<strong>独立方向的数量</strong>。</p>
+            <p>求几何重数的方法（已知 \(\lambda\)）：</p>
+            <ol>
+              <li>计算 \(A-\lambda I\)；</li>
+              <li>求解 \((A-\lambda I)x=0\)；</li>
+              <li>统计自由变量个数；</li>
+              <li>自由变量个数即几何重数，即 \(g(\lambda)=n-\operatorname{rank}(A-\lambda I)\)。</li>
+            </ol>
+          </section>
+
+          <section class="chapter" id="sec-2-4">
+            <h2>2.4 两种重数的关系与可对角化</h2>
+            <p>永远成立：</p>
+            <div class="math">$$1\le g(\lambda)\le a(\lambda),$$</div>
+            <p>即：<strong>几何重数永远不会超过代数重数</strong>。</p>
+            <p>矩阵可对角化 \(\iff\) 所有特征值满足 \(g(\lambda)=a(\lambda)\)，即特征向量数量足够。</p>
+            <div class="callout example">
+              <div class="callout-title">例</div>
+              <p>\(A=\begin{bmatrix}2&amp;0\\0&amp;2\end{bmatrix}\) 有两个线性无关特征向量，\(g(2)=2,\ a(2)=2\)，<strong>可对角化</strong>。</p>
+              <p>而 \(A=\begin{bmatrix}2&amp;1\\0&amp;2\end{bmatrix}\) 有 \(a(2)=2\) 但 \(g(2)=1\)，<strong>不可对角化</strong>。</p>
+            </div>
+          </section>
+        </section>
+
+        <section class="part" id="part-3">
+          <div class="part-heading">
+            <span class="part-badge">Part III</span>
+            <h1>Jordan 理论</h1>
+          </div>
+          <p class="part-lead">特征向量不够时，矩阵内部仍有完整的链式结构可被刻画。</p>
+
+          <section class="chapter" id="sec-3-1">
+            <h2>3.1 为什么要 Jordan 理论</h2>
+            <p>矩阵最理想的情况是可对角化：\(A=PDP^{-1}\)，其中 \(D=\operatorname{diag}(\lambda_1,\dots,\lambda_n)\)。此时每个基向量都是特征向量：\(Av_i=\lambda_i v_i\)，矩阵作用只是沿各个方向独立伸缩。</p>
+            <p>但有些矩阵做不到。例如</p>
+            <div class="math">$$A=\begin{bmatrix}2&amp;1\\0&amp;2\end{bmatrix},$$</div>
+            <p>特征值 \(\lambda=2\)，代数重数 \(a(2)=2\)，但只有一个特征向量 \(v_1=\begin{bmatrix}1\\0\end{bmatrix}\)，即 \(g(2)=1\)。因此 \(g(2)&lt;a(2)\)，特征向量数量不足，<strong>无法对角化</strong>。</p>
+            <p>Jordan 理论就是研究：<strong>当特征向量不够时，矩阵内部究竟是什么结构</strong>。</p>
+            <div class="callout warning">
+              <div class="callout-title">问题</div>
+              <p>空间是二维的，却只能找到一个独立特征向量。缺失的那个方向去哪了？</p>
+            </div>
+          </section>
+
+          <section class="chapter" id="sec-3-2">
+            <h2>3.2 剥离伸缩部分：N = A − λI</h2>
+            <p>对某个特征值 \(\lambda\)，定义</p>
+            <div class="math">$$N=A-\lambda I,$$</div>
+            <p>于是</p>
+            <div class="math">$$A=\lambda I+N,$$</div>
+            <p>其中 \(\lambda I\) 表示<strong>纯伸缩</strong>，\(N\) 表示<strong>额外耦合结构</strong>。Jordan 理论真正研究的是 \(N\)。</p>
+            <p>例如 \(A=\begin{bmatrix}2&amp;1\\0&amp;2\end{bmatrix}\)，则</p>
+            <div class="math">$$N=A-2I=\begin{bmatrix}0&amp;1\\0&amp;0\end{bmatrix}.$$</div>
+            <p>观察其作用：</p>
+            <div class="math">$$Ne_1=0,\qquad Ne_2=e_1,$$</div>
+            <p>即 \(e_2\to e_1\to 0\)。</p>
+          </section>
+
+          <section class="chapter" id="sec-3-3">
+            <h2>3.3 普通特征向量</h2>
+            <p>普通特征向量满足</p>
+            <div class="math">$$(A-\lambda I)v=0 \iff Nv=0,$$</div>
+            <p>含义：<strong>经过一次 \(N\) 作用就归零</strong>（一步就被送到零）。例如 \(Ne_1=0\)，所以 \(e_1\) 是普通特征向量。</p>
+          </section>
+
+          <section class="chapter" id="sec-3-4">
+            <h2>3.4 广义特征向量</h2>
+            <p>普通特征向量要求太严格（\(Nv=0\)），于是放宽条件：若存在整数 \(k\) 使得</p>
+            <div class="math">$$N^k v=(A-\lambda I)^k v=0,$$</div>
+            <p>则称 \(v\) 为<strong>广义特征向量（Generalized Eigenvector）</strong>。普通特征向量是 \(k=1\) 的特殊情形，因此</p>
+            <div class="conclusion">普通特征向量 \(\subset\) 广义特征向量</div>
+            <p>直觉：普通特征向量 \(Nv=0\) 一步归零；广义特征向量允许 \(Nv\ne 0\)，但<strong>最终归零</strong>。</p>
+          </section>
+
+          <section class="chapter" id="sec-3-5">
+            <h2>3.5 Jordan 链</h2>
+            <p>对 \(N=\begin{bmatrix}0&amp;1\\0&amp;0\end{bmatrix}\)，有 \(Ne_2=e_1,\ Ne_1=0\)，形成</p>
+            <div class="math">$$e_2\to e_1\to 0.$$</div>
+            <p>一般定义：</p>
+            <div class="math">$$Nv_1=0,\quad Nv_2=v_1,\quad Nv_3=v_2,\quad \cdots$$</div>
+            <p>即</p>
+            <div class="math">$$v_k\to v_{k-1}\to\cdots\to v_1\to 0,$$</div>
+            <p>称为 <strong>Jordan 链</strong>。等价地：</p>
+            <div class="math">$$(A-\lambda I)v_1=0,\quad (A-\lambda I)v_2=v_1,\quad (A-\lambda I)v_3=v_2,\ \cdots$$</div>
+            <div class="callout example">
+              <div class="callout-title">图形理解</div>
+              <p>长度 2：\(v_2\to v_1\to 0\)；长度 3：\(v_3\to v_2\to v_1\to 0\)；长度 4：\(v_4\to v_3\to v_2\to v_1\to 0\)。</p>
+            </div>
+            <div class="callout insight">
+              <div class="callout-title">Jordan 链的本质</div>
+              <p>特征向量是“不动方向”，广义特征向量是“最终会掉进不动方向的方向”，Jordan 链记录“这些方向掉进去的路径”。</p>
+            </div>
+          </section>
+
+          <section class="chapter" id="sec-3-6">
+            <h2>3.6 Jordan 块</h2>
+            <p>由 \(Nv_1=0,\ Nv_2=v_1\) 得到</p>
+            <div class="math">$$Av_1=\lambda v_1,\qquad Av_2=\lambda v_2+v_1.$$</div>
+            <p>在基 \(\{v_1,v_2\}\) 下矩阵表示为</p>
+            <div class="math">$$J=\begin{bmatrix}\lambda&amp;1\\0&amp;\lambda\end{bmatrix},$$</div>
+            <p>这就是 <strong>Jordan 块</strong>。长度 3 的链对应</p>
+            <div class="math">$$J=\begin{bmatrix}\lambda&amp;1&amp;0\\0&amp;\lambda&amp;1\\0&amp;0&amp;\lambda\end{bmatrix}.$$</div>
+            <p>一般 \(k\) 阶 Jordan 块：</p>
+            <div class="math">$$J_k(\lambda)=\begin{bmatrix}\lambda&amp;1&amp;0&amp;\cdots&amp;0\\0&amp;\lambda&amp;1&amp;\cdots&amp;0\\0&amp;0&amp;\lambda&amp;\ddots&amp;\vdots\\\vdots&amp;\vdots&amp;\vdots&amp;\ddots&amp;1\\0&amp;0&amp;0&amp;\cdots&amp;\lambda\end{bmatrix}.$$</div>
+            <p>例：</p>
+            <div class="math">$$J_1(\lambda)=[\lambda],\qquad J_2(\lambda)=\begin{bmatrix}\lambda&amp;1\\0&amp;\lambda\end{bmatrix},\qquad J_3(\lambda)=\begin{bmatrix}\lambda&amp;1&amp;0\\0&amp;\lambda&amp;1\\0&amp;0&amp;\lambda\end{bmatrix}.$$</div>
+            <p>Jordan 块与链的关系：对 \(J_3(\lambda)\)，令 \(N=J_3(\lambda)-\lambda I\)，则</p>
+            <div class="math">$$Ne_3=e_2,\quad Ne_2=e_1,\quad Ne_1=0,$$</div>
+            <p>即 \(e_3\to e_2\to e_1\to 0\)。因此：<strong>一个 \(k\) 阶 Jordan 块 = 一条长度 \(k\) 的 Jordan 链</strong>。</p>
+          </section>
+
+          <section class="chapter" id="sec-3-7">
+            <h2>3.7 直和</h2>
+            <p>符号 \(\oplus\) 读作<strong>直和（Direct Sum）</strong>，定义</p>
+            <div class="math">$$A\oplus B=\begin{bmatrix}A&amp;0\\0&amp;B\end{bmatrix}.$$</div>
+            <p>例如</p>
+            <div class="math">$$\begin{bmatrix}2&amp;1\\0&amp;2\end{bmatrix}\oplus [2]=\begin{bmatrix}2&amp;1&amp;0\\0&amp;2&amp;0\\0&amp;0&amp;2\end{bmatrix}.$$</div>
+          </section>
+
+          <section class="chapter" id="sec-3-8">
+            <h2>3.8 例子：两个 Jordan 块</h2>
+            <p>矩阵</p>
+            <div class="math">$$A=\begin{bmatrix}2&amp;1&amp;0\\0&amp;2&amp;0\\0&amp;0&amp;2\end{bmatrix},$$</div>
+            <p>特征值 \(2,2,2\)，因此 \(a(2)=3\)。解 \((A-2I)x=0\) 得</p>
+            <div class="math">$$x=\begin{bmatrix}x_1\\0\\x_3\end{bmatrix}.$$</div>
+            <p>取两个链头</p>
+            <div class="math">$$v_1=\begin{bmatrix}1\\0\\0\end{bmatrix},\qquad w_1=\begin{bmatrix}0\\0\\1\end{bmatrix},$$</div>
+            <p>因此 \(g(2)=2\)。第一条链取 \(v_2=\begin{bmatrix}0\\1\\0\end{bmatrix}\)，满足 \((A-2I)v_2=v_1\)，所以 \(v_2\to v_1\to 0\)（长度 2）；第二条链 \(w_1\to 0\)（长度 1）。于是</p>
+            <div class="math">$$J=J_2(2)\oplus J_1(2)=\begin{bmatrix}2&amp;1&amp;0\\0&amp;2&amp;0\\0&amp;0&amp;2\end{bmatrix}.$$</div>
+          </section>
+
+          <section class="chapter" id="sec-3-9">
+            <h2>3.9 重数与 Jordan 块的对应</h2>
+            <p>每条 Jordan 链都有一个链头（\(Nv_1=0\)），链头就是特征向量。因此</p>
+            <div class="conclusion">\(g(\lambda)\) = Jordan 块个数</div>
+            <p>一个 Jordan 块 \(J_k(\lambda)\) 的特征多项式为 \((\mu-\lambda)^k\)，贡献 \(k\) 次代数重数。因此对</p>
+            <div class="math">$$J_{k_1}(\lambda)\oplus J_{k_2}(\lambda)\oplus\cdots\oplus J_{k_r}(\lambda),$$</div>
+            <p>有</p>
+            <div class="math">$$a(\lambda)=k_1+k_2+\cdots+k_r,$$</div>
+            <p>即：<strong>代数重数 = Jordan 块大小总和</strong>。</p>
+            <div class="callout insight">
+              <div class="callout-title">结论</div>
+              <p>\(g(\lambda)=a(\lambda)\) 当且仅当所有 Jordan 块都是 \(J_1(\lambda)\)（所有链长度都为 1）。此时不存在真正的广义特征向量，矩阵可对角化。</p>
+            </div>
+          </section>
+
+          <section class="chapter" id="sec-3-10">
+            <h2>3.10 主线总结</h2>
+            <p>对某个特征值 \(\lambda\)：\(A=\lambda I+N\)，研究 \(N\) 的链式结构。</p>
+            <ul>
+              <li>Jordan 链：\(v_k\to v_{k-1}\to\cdots\to v_1\to 0\)；</li>
+              <li>Jordan 块：\(J_k(\lambda)\) 对应一条长度 \(k\) 的链；</li>
+              <li>核心对应：\(g(\lambda)\) = Jordan 块个数，\(a(\lambda)\) = Jordan 块大小总和。</li>
+            </ul>
+            <p>因此：</p>
+            <div class="conclusion">对角化失败 \(\Longrightarrow\) Jordan 链 \(\Longrightarrow\) Jordan 标准形</div>
+          </section>
+        </section>
+
+        <section class="part" id="part-4">
+          <div class="part-heading">
+            <span class="part-badge">Part IV</span>
+            <h1>正规矩阵与谱分解</h1>
+          </div>
+          <p class="part-lead">当 Jordan 块全部退化时，就是谱定理的世界。</p>
+
+          <section class="chapter" id="sec-4-1">
+            <h2>4.1 正规矩阵</h2>
+            <div class="callout definition">
+              <div class="callout-title">正规矩阵</div>
+              <div class="math">$$A^*A=AA^*,$$</div>
+              <p>实数情况：\(A^TA=AA^T\)。典型例子：对称矩阵、Hermite 矩阵、酉矩阵、正交矩阵。</p>
+            </div>
+          </section>
+
+          <section class="chapter" id="sec-4-2">
+            <h2>4.2 为什么正规矩阵没有 Jordan 块</h2>
+            <p>设 \(N=A-\lambda I\)。正规矩阵减去标量矩阵后仍正规。若存在 Jordan 链</p>
+            <div class="math">$$Nv_1=0,\qquad Nv_2=v_1,$$</div>
+            <p>正规矩阵满足 \(\ker N=\ker N^*\)，所以 \(N^*v_1=0\)。对 \(Nv_2=v_1\) 取内积：</p>
+            <div class="math">$$\langle Nv_2,v_1\rangle=\langle v_2,N^*v_1\rangle=0,$$</div>
+            <p>但左边</p>
+            <div class="math">$$\langle Nv_2,v_1\rangle=\langle v_1,v_1\rangle=\|v_1\|^2,$$</div>
+            <p>矛盾。因此：<strong>正规矩阵不存在 Jordan 链</strong>，即 \(g(\lambda)=a(\lambda)\)。</p>
+          </section>
+
+          <section class="chapter" id="sec-4-3">
+            <h2>4.3 谱定理</h2>
+            <p>正规矩阵一定存在一组正交归一特征向量 \(q_1,\dots,q_n\)。构造</p>
+            <div class="math">$$Q=[q_1\ q_2\ \cdots\ q_n],$$</div>
+            <p>由于正交归一，\(Q^{-1}=Q^*\)，于是</p>
+            <div class="math">$$D=Q^*AQ$$</div>
+            <p>成为对角矩阵 \(D=\operatorname{diag}(\lambda_1,\dots,\lambda_n)\)，即</p>
+            <div class="math">$$A=QDQ^*.$$</div>
+            <p>这称为 <strong>谱分解</strong>。</p>
+          </section>
+
+          <section class="chapter" id="sec-4-4">
+            <h2>4.4 谱分解的几何意义</h2>
+            <p>谱分解 \(A=QDQ^*\) 表示：</p>
+            <div class="conclusion">原基 \(\to\) 归一特征向量基 \(\to\) 沿特征方向伸缩 \(\to\) 返回原基</div>
+            <ul>
+              <li>\(Q^*\)：原基坐标 → 归一特征向量基坐标；</li>
+              <li>\(D\)：\((a_1,\dots,a_n)\mapsto(\lambda_1a_1,\dots,\lambda_na_n)\)，沿每个特征向量方向独立伸缩；</li>
+              <li>\(Q\)：将结果重新变回原基坐标。</li>
+            </ul>
+            <p>因此：<strong>谱分解 = 在特征向量基下观察同一个线性变换</strong>。</p>
+          </section>
+
+          <section class="chapter" id="sec-4-5">
+            <h2>4.5 Jordan 分解与谱分解的关系</h2>
+            <p>Jordan 分解 \(A=PJP^{-1}\)：原基 → Jordan 基 → \(J\) → 原基；谱分解 \(A=QDQ^*\)：原基 → 正交归一特征向量基 → \(D\) → 原基。</p>
+            <p>区别：Jordan 块 \(\begin{bmatrix}\lambda&amp;1\\0&amp;\lambda\end{bmatrix}\) 存在<strong>方向耦合</strong>；对角块 \(\begin{bmatrix}\lambda&amp;0\\0&amp;\lambda\end{bmatrix}\) 只存在<strong>独立伸缩</strong>。</p>
+            <p>因此：</p>
+            <ul>
+              <li>Jordan 分解是<strong>最一般形式</strong>；</li>
+              <li>谱分解是<strong>正规矩阵上的特殊情形</strong>；</li>
+              <li>正规矩阵 ⇒ Jordan 块全部退化为 \(1\times 1\)，最终得到纯对角形式。</li>
+            </ul>
+          </section>
+        </section>
+
+        <footer class="page-footer">
+          <p>本笔记整合自以下三篇 ChatGPT 笔记：</p>
+          <ol>
+            <li><a href="https://chatgpt.com/s/t_6aa223b05e348191a0d882221b718553" target="_blank" rel="noreferrer">Jordan 理论前置知识笔记（特征值 → 重数 → 广义特征向量 → Jordan 链）</a></li>
+            <li><a href="https://chatgpt.com/s/t_6aa2456564288191b104ca244de48dc8" target="_blank" rel="noreferrer">Jordan 理论笔记</a></li>
+            <li><a href="https://chatgpt.com/s/t_6aa25f9182b4819186ba6aac07709bc1" target="_blank" rel="noreferrer">线性变换、换基、相似变换、Jordan 分解与谱分解笔记</a></li>
+          </ol>
+          <p class="muted">作者：Joshua · 时间：2026年9月10日</p>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <button class="to-top" id="toTop" aria-label="返回顶部">↑</button>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+
+      var progressBar = document.getElementById("progressBar");
+      var toTop = document.getElementById("toTop");
+      var sidebar = document.getElementById("sidebar");
+      var scrim = document.getElementById("scrim");
+      var menuToggle = document.getElementById("menuToggle");
+
+      function onScroll() {
+        var h = document.documentElement;
+        var max = h.scrollHeight - h.clientHeight;
+        var ratio = max > 0 ? h.scrollTop / max : 0;
+        progressBar.style.width = (ratio * 100) + "%";
+        toTop.classList.toggle("show", h.scrollTop > 400);
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      toTop.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      menuToggle.addEventListener("click", function () {
+        sidebar.classList.toggle("open");
+        scrim.classList.toggle("show");
+      });
+      scrim.addEventListener("click", function () {
+        sidebar.classList.remove("open");
+        scrim.classList.remove("show");
+      });
+
+      document.querySelectorAll(".nav-link").forEach(function (link) {
+        link.addEventListener("click", function () {
+          sidebar.classList.remove("open");
+          scrim.classList.remove("show");
+        });
+      });
+
+      var links = Array.prototype.slice.call(document.querySelectorAll(".nav-link"));
+      var headingEls = Array.prototype.slice.call(document.querySelectorAll("section.chapter"));
+      if ("IntersectionObserver" in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              var id = entry.target.id;
+              links.forEach(function (l) {
+                l.classList.toggle("active", l.dataset.target === id);
+              });
+            }
+          });
+        }, { rootMargin: "0px 0px -70% 0px" });
+        headingEls.forEach(function (h) { observer.observe(h); });
+      }
+
+      var searchInput = document.getElementById("tocSearch");
+      searchInput.addEventListener("input", function () {
+        var q = searchInput.value.trim().toLowerCase();
+        links.forEach(function (link) {
+          var hit = link.textContent.toLowerCase().indexOf(q) !== -1;
+          link.style.display = hit ? "" : "none";
+        });
+        document.querySelectorAll(".nav-group").forEach(function (group) {
+          var anyVisible = Array.prototype.some.call(
+            group.querySelectorAll(".nav-link"),
+            function (l) { return l.style.display !== "none"; }
+          );
+          group.style.display = anyVisible ? "" : "none";
+        });
+      });
+    });
+  </script>
+</body>
+</html>
