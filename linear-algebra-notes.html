@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>特征值、Jordan 理论、谱分解与 SVD｜线性代数整合笔记</title>
+  <title>特征值、Jordan 理论、谱分解、SVD 与正定矩阵｜线性代数整合笔记</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
   <style>
     :root {
@@ -310,7 +310,7 @@
         <div class="brand-logo">Σ</div>
         <div>
           <div class="brand-title">线性代数整合笔记</div>
-          <div class="brand-sub">Eigenvalues · Jordan · Spectra · SVD</div>
+          <div class="brand-sub">Eigenvalues · Jordan · Spectra · SVD · Positive Definite</div>
         </div>
       </div>
       <div class="search">
@@ -357,26 +357,37 @@
           <a class="nav-link" href="#sec-4-5" data-target="sec-4-5">4.5 Jordan 分解与谱分解的关系</a>
         </div>
         <div class="nav-group">
-          <div class="nav-group-title">Part V · 奇异值分解 SVD</div>
-          <a class="nav-link" href="#sec-5-1" data-target="sec-5-1">5.1 为什么需要 SVD</a>
-          <a class="nav-link" href="#sec-5-2" data-target="sec-5-2">5.2 SVD 的出发点</a>
-          <a class="nav-link" href="#sec-5-3" data-target="sec-5-3">5.3 奇异值的定义</a>
-          <a class="nav-link" href="#sec-5-4" data-target="sec-5-4">5.4 构造左奇异向量</a>
-          <a class="nav-link" href="#sec-5-5" data-target="sec-5-5">5.5 SVD 公式</a>
-          <a class="nav-link" href="#sec-5-6" data-target="sec-5-6">5.6 SVD 的几何意义</a>
-          <a class="nav-link" href="#sec-5-7" data-target="sec-5-7">5.7 SVD 的本质</a>
+          <div class="nav-group-title">Part V · 正定矩阵与二次型</div>
+          <a class="nav-link" href="#sec-5-1" data-target="sec-5-1">5.1 从谱分解到二次型</a>
+          <a class="nav-link" href="#sec-5-2" data-target="sec-5-2">5.2 正定矩阵的定义</a>
+          <a class="nav-link" href="#sec-5-3" data-target="sec-5-3">5.3 为什么正定等价于特征值全正</a>
+          <a class="nav-link" href="#sec-5-4" data-target="sec-5-4">5.4 半正定矩阵</a>
+          <a class="nav-link" href="#sec-5-5" data-target="sec-5-5">5.5 正定矩阵的几何意义</a>
+          <a class="nav-link" href="#sec-5-6" data-target="sec-5-6">5.6 正定矩阵与平方根</a>
+          <a class="nav-link" href="#sec-5-7" data-target="sec-5-7">5.7 Cholesky 分解</a>
+          <a class="nav-link" href="#sec-5-8" data-target="sec-5-8">5.8 知识链总结</a>
         </div>
         <div class="nav-group">
-          <div class="nav-group-title">Part VI · 三种分解的统一视角</div>
-          <a class="nav-link" href="#sec-6-1" data-target="sec-6-1">6.1 三种理论研究的是同一个对象</a>
-          <a class="nav-link" href="#sec-6-2" data-target="sec-6-2">6.2 Jordan 型研究什么</a>
-          <a class="nav-link" href="#sec-6-3" data-target="sec-6-3">6.3 谱分解研究什么</a>
-          <a class="nav-link" href="#sec-6-4" data-target="sec-6-4">6.4 SVD 研究什么</a>
-          <a class="nav-link" href="#sec-6-5" data-target="sec-6-5">6.5 三者的关系</a>
-          <a class="nav-link" href="#sec-6-6" data-target="sec-6-6">6.6 最核心的总结</a>
+          <div class="nav-group-title">Part VI · 奇异值分解 SVD</div>
+          <a class="nav-link" href="#sec-6-1" data-target="sec-6-1">6.1 为什么需要 SVD</a>
+          <a class="nav-link" href="#sec-6-2" data-target="sec-6-2">6.2 SVD 的出发点</a>
+          <a class="nav-link" href="#sec-6-3" data-target="sec-6-3">6.3 奇异值的定义</a>
+          <a class="nav-link" href="#sec-6-4" data-target="sec-6-4">6.4 构造左奇异向量</a>
+          <a class="nav-link" href="#sec-6-5" data-target="sec-6-5">6.5 SVD 公式</a>
+          <a class="nav-link" href="#sec-6-6" data-target="sec-6-6">6.6 SVD 的几何意义</a>
+          <a class="nav-link" href="#sec-6-7" data-target="sec-6-7">6.7 SVD 的本质</a>
+        </div>
+        <div class="nav-group">
+          <div class="nav-group-title">Part VII · 三种分解的统一视角</div>
+          <a class="nav-link" href="#sec-7-1" data-target="sec-7-1">7.1 三种理论研究的是同一个对象</a>
+          <a class="nav-link" href="#sec-7-2" data-target="sec-7-2">7.2 Jordan 型研究什么</a>
+          <a class="nav-link" href="#sec-7-3" data-target="sec-7-3">7.3 谱分解研究什么</a>
+          <a class="nav-link" href="#sec-7-4" data-target="sec-7-4">7.4 SVD 研究什么</a>
+          <a class="nav-link" href="#sec-7-5" data-target="sec-7-5">7.5 三者的关系</a>
+          <a class="nav-link" href="#sec-7-6" data-target="sec-7-6">7.6 最核心的总结</a>
         </div>
       </nav>
-      <div class="sidebar-footer">作者 Joshua · 2026年9月10日 · 整合自多篇 ChatGPT 笔记</div>
+      <div class="sidebar-footer">作者 Joshua · 2026年9月11日 · 整合自多篇 ChatGPT 笔记</div>
     </aside>
     <div class="scrim" id="scrim"></div>
 
@@ -384,8 +395,8 @@
       <div class="page">
         <section class="hero">
           <div class="hero-kicker">Linear Algebra · 整合笔记</div>
-          <h1 class="hero-title">特征值、Jordan 理论、谱分解与 SVD</h1>
-          <p class="hero-sub">从线性变换与换基出发，贯通特征值、代数 / 几何重数、Jordan 标准形、正规矩阵的谱分解，直至奇异值分解（SVD），并比较三者的统一关系。</p>
+          <h1 class="hero-title">特征值、Jordan 理论、谱分解、SVD 与正定矩阵</h1>
+          <p class="hero-sub">从线性变换与换基出发，贯通特征值、Jordan 标准形、谱分解、SVD，直至正定矩阵、二次型与 Cholesky 分解。</p>
           <div class="flow">
             <span class="flow-item">线性变换与换基</span>
             <span class="flow-arrow">→</span>
@@ -397,13 +408,15 @@
             <span class="flow-arrow">→</span>
             <span class="flow-item">谱分解</span>
             <span class="flow-arrow">→</span>
+            <span class="flow-item">正定矩阵</span>
+            <span class="flow-arrow">→</span>
             <span class="flow-item">SVD</span>
             <span class="flow-arrow">→</span>
             <span class="flow-item">三种分解统一视角</span>
           </div>
           <div class="hero-meta">
             <span>作者：Joshua</span>
-            <span>更新时间：2026年9月10日</span>
+            <span>更新时间：2026年9月11日</span>
             <span>多篇笔记整合</span>
           </div>
         </section>
@@ -431,11 +444,16 @@
           </a>
           <a class="overview-card" href="#part-5">
             <div class="overview-num">PART V</div>
-            <div class="overview-title">奇异值分解 SVD</div>
-            <p class="overview-desc">奇异值、左奇异向量、SVD 公式及其几何意义。</p>
+            <div class="overview-title">正定矩阵与二次型</div>
+            <p class="overview-desc">二次型、正定 / 半正定判据、平方根与 Cholesky 分解。</p>
           </a>
           <a class="overview-card" href="#part-6">
             <div class="overview-num">PART VI</div>
+            <div class="overview-title">奇异值分解 SVD</div>
+            <p class="overview-desc">奇异值、左奇异向量、SVD 公式及其几何意义。</p>
+          </a>
+          <a class="overview-card" href="#part-7">
+            <div class="overview-num">PART VII</div>
             <div class="overview-title">三种分解的统一视角</div>
             <p class="overview-desc">Jordan、谱分解与 SVD 的研究对象、差异与联系。</p>
           </a>
@@ -450,6 +468,14 @@
 
           <section class="chapter" id="changelog">
             <div class="changelog">
+              <div class="changelog-item">
+                <div class="changelog-date">2026-09-11 09:46</div>
+                <div class="changelog-content">调整正定矩阵与二次型至 SVD 之前：现为 Part V 正定矩阵与二次型、Part VI 奇异值分解 SVD、Part VII 三种分解的统一视角。</div>
+              </div>
+              <div class="changelog-item">
+                <div class="changelog-date">2026-09-11 09:42</div>
+                <div class="changelog-content">新增正定矩阵与二次型内容：二次型、正定 / 半正定判据、几何意义、矩阵平方根与 Cholesky 分解。</div>
+              </div>
               <div class="changelog-item">
                 <div class="changelog-date">2026-09-10 22:07</div>
                 <div class="changelog-content">新增 <code>index.html</code> 网站入口，便于将本笔记部署为 GitHub Pages 静态网站。</div>
@@ -804,12 +830,131 @@
         <section class="part" id="part-5">
           <div class="part-heading">
             <span class="part-badge">Part V</span>
+            <h1>正定矩阵与二次型</h1>
+          </div>
+          <p class="part-lead">从谱分解出发，把“矩阵正定性”转化为“特征值的正负”，并通向平方根与 Cholesky 分解。</p>
+
+          <section class="chapter" id="sec-5-1">
+            <h2>5.1 从谱分解到二次型</h2>
+            <p>设 \(A=A^*\) 为 Hermite 矩阵（实数域即实对称矩阵）。根据谱定理：</p>
+            <div class="math">$$A=Q\Lambda Q^*,$$</div>
+            <p>其中</p>
+            <div class="math">$$Q^*Q=I,\qquad \Lambda=\operatorname{diag}(\lambda_1,\lambda_2,\cdots,\lambda_n).$$</div>
+            <p>考虑二次型 \(x^*Ax\)。代入谱分解：</p>
+            <div class="math">$$x^*Ax=x^*Q\Lambda Q^*x.$$</div>
+            <p>令 \(y=Q^*x\)，得到</p>
+            <div class="math">$$x^*Ax=y^*\Lambda y.$$</div>
+            <p>展开：</p>
+            <div class="math">$$\boxed{x^*Ax=\lambda_1|y_1|^2+\lambda_2|y_2|^2+\cdots+\lambda_n|y_n|^2}.$$</div>
+            <p>这说明：二次型本质上是把向量分解到各个特征方向上，再按照对应特征值进行加权求和。</p>
+          </section>
+
+          <section class="chapter" id="sec-5-2">
+            <h2>5.2 正定矩阵的定义</h2>
+            <p>定义</p>
+            <div class="math">$$\boxed{A>0}$$</div>
+            <p>（正定矩阵）当且仅当</p>
+            <div class="math">$$\boxed{x^*Ax>0\qquad(\forall x\ne 0)}.$$</div>
+            <p>注意：要求的是 \(\forall x\ne0\)，而不是 \(\exists x\)。即对于任何非零向量，二次型都必须严格大于零。</p>
+          </section>
+
+          <section class="chapter" id="sec-5-3">
+            <h2>5.3 为什么正定等价于特征值全正</h2>
+            <p>利用</p>
+            <div class="math">$$x^*Ax=\sum_{i=1}^{n}\lambda_i|y_i|^2$$</div>
+            <p>分析。</p>
+            <h3>情况一：全部特征值均大于零</h3>
+            <p>若 \(\lambda_i>0\) 对所有 \(i\) 成立，则</p>
+            <div class="math">$$\lambda_i|y_i|^2\ge 0.$$</div>
+            <p>由于 \(x\ne0\) 而 \(y=Q^*x\)，故 \(y\ne0\)。至少存在一个 \(y_k\ne0\)，于是</p>
+            <div class="math">$$\lambda_k|y_k|^2>0.$$</div>
+            <p>因此 \(x^*Ax>0\)。所以：</p>
+            <div class="math">$$\boxed{\lambda_i>0\ \forall i\ \Longrightarrow\ A>0}.$$</div>
+            <h3>情况二：存在负特征值</h3>
+            <p>若存在 \(\lambda_k<0\)，取 \(y=e_k=(0,\cdots,0,1,0,\cdots,0)^T\)，则 \(x=Qy\) 对应于第 \(k\) 个特征方向。此时：</p>
+            <div class="math">$$x^*Ax=\lambda_k.$$</div>
+            <p>由于 \(\lambda_k<0\)，得到 \(x^*Ax<0\)，与正定定义矛盾。因此：</p>
+            <div class="math">$$\boxed{A>0\ \Longrightarrow\ \lambda_i>0}.$$</div>
+            <p>综合得到：</p>
+            <div class="math">$$\boxed{A>0\iff\lambda_i>0\quad(\forall i)}.$$</div>
+          </section>
+
+          <section class="chapter" id="sec-5-4">
+            <h2>5.4 半正定矩阵</h2>
+            <p>若 \(x^*Ax\ge0\) 对所有 \(x\) 成立，则称 \(A\) 为<strong>半正定矩阵</strong>，记作 \(A\ge0\)。</p>
+            <p>此时特征值满足：</p>
+            <div class="math">$$\boxed{\lambda_i\ge 0}.$$</div>
+            <p>对应关系：</p>
+            <div class="math">$$A>0\iff\lambda_i>0,\qquad A\ge0\iff\lambda_i\ge0.$$</div>
+          </section>
+
+          <section class="chapter" id="sec-5-5">
+            <h2>5.5 正定矩阵的几何意义</h2>
+            <p>谱分解 \(A=Q\Lambda Q^*\) 对应过程：</p>
+            <div class="math">$$x \xrightarrow{Q^*} y \xrightarrow{\Lambda} \Lambda y \xrightarrow{Q} Ax.$$</div>
+            <p>其中 \(\Lambda\) 负责沿特征方向进行伸缩。</p>
+            <p>若 \(\lambda_i>0\)，则对应特征方向仅发生 \(q_i\to\lambda_iq_i\)，不会翻转方向；若 \(\lambda_i<0\)，则会产生方向翻转。</p>
+            <p>因此：</p>
+            <div class="conclusion">正定矩阵在所有特征方向上都进行正伸缩</div>
+          </section>
+
+          <section class="chapter" id="sec-5-6">
+            <h2>5.6 正定矩阵与平方根</h2>
+            <p>由于 \(\lambda_i>0\)，可以定义</p>
+            <div class="math">$$\Lambda^{1/2}=\operatorname{diag}(\sqrt{\lambda_1},\cdots,\sqrt{\lambda_n}).$$</div>
+            <p>于是：</p>
+            <div class="math">$$A=Q\Lambda Q^*=Q\Lambda^{1/2}\Lambda^{1/2}Q^*.$$</div>
+            <p>整理：</p>
+            <div class="math">$$A=(Q\Lambda^{1/2})(Q\Lambda^{1/2})^*.$$</div>
+            <p>记 \(B=Q\Lambda^{1/2}\)，得到：</p>
+            <div class="math">$$\boxed{A=BB^*}.$$</div>
+            <p>因此：</p>
+            <div class="math">$$x^*Ax=x^*BB^*x=(B^*x)^*(B^*x)=\|B^*x\|^2,$$</div>
+            <p>即</p>
+            <div class="math">$$\boxed{x^*Ax=\|B^*x\|^2}.$$</div>
+            <p>这说明正定矩阵对应某种“长度平方”。</p>
+          </section>
+
+          <section class="chapter" id="sec-5-7">
+            <h2>5.7 Cholesky 分解</h2>
+            <p>对于 Hermite 正定矩阵 \(A>0\)，存在唯一的下三角矩阵 \(L\) 满足对角元为正，并且</p>
+            <div class="math">$$\boxed{A=LL^*}.$$</div>
+            <p>称为 <strong>Cholesky 分解</strong>。</p>
+            <p>它可以看作 \(A=BB^*\) 的一种特殊形式。因此：</p>
+            <div class="math">$$x^*Ax=x^*LL^*x=(L^*x)^*(L^*x)=\|L^*x\|^2.$$</div>
+          </section>
+
+          <section class="chapter" id="sec-5-8">
+            <h2>5.8 知识链总结</h2>
+            <div class="math">$$
+\begin{array}{c}
+A=A^* \\
+\downarrow \\
+A=Q\Lambda Q^* \quad (\text{谱分解}) \\
+\downarrow \\
+x^*Ax=\sum\lambda_i|y_i|^2 \quad (\text{二次型}) \\
+\downarrow \\
+A>0 \iff \lambda_i>0 \quad (\text{正定判据}) \\
+\downarrow \\
+A=BB^* \quad (\text{矩阵平方根}) \\
+\downarrow \\
+A=LL^* \quad (\text{Cholesky 分解}) \\
+\downarrow \\
+x^*Ax=\|L^*x\|^2 \quad (\text{长度与内积的来源})
+\end{array}
+$$</div>
+          </section>
+        </section>
+
+        <section class="part" id="part-6">
+          <div class="part-heading">
+            <span class="part-badge">Part VI</span>
             <h1>奇异值分解（SVD）</h1>
           </div>
           <p class="part-lead">谱分解只适用于正规矩阵；SVD 则把类似的分解推广到任意矩阵。</p>
 
-          <section class="chapter" id="sec-5-1">
-            <h2>5.1 为什么需要 SVD</h2>
+          <section class="chapter" id="sec-6-1">
+            <h2>6.1 为什么需要 SVD</h2>
             <p>对于正规矩阵，可以进行谱分解：</p>
             <div class="math">$$A=Q\Lambda Q^*,$$</div>
             <p>其中</p>
@@ -825,8 +970,8 @@
             <p>这就是奇异值分解（Singular Value Decomposition，SVD）。</p>
           </section>
 
-          <section class="chapter" id="sec-5-2">
-            <h2>5.2 SVD 的出发点</h2>
+          <section class="chapter" id="sec-6-2">
+            <h2>6.2 SVD 的出发点</h2>
             <p>考虑矩阵 \(A^*A\)。首先</p>
             <div class="math">$$(A^*A)^*=A^*A,$$</div>
             <p>因此 \(A^*A\) 一定是 Hermite 矩阵。</p>
@@ -842,8 +987,8 @@
             <p>满足 \(\lambda_i\ge 0\)。</p>
           </section>
 
-          <section class="chapter" id="sec-5-3">
-            <h2>5.3 奇异值的定义</h2>
+          <section class="chapter" id="sec-6-3">
+            <h2>6.3 奇异值的定义</h2>
             <p>定义</p>
             <div class="math">$$\boxed{\sigma_i=\sqrt{\lambda_i(A^*A)}},$$</div>
             <p>称为矩阵 \(A\) 的<strong>奇异值</strong>。</p>
@@ -853,8 +998,8 @@
             <div class="math">$$\Lambda=\Sigma^2.$$</div>
           </section>
 
-          <section class="chapter" id="sec-5-4">
-            <h2>5.4 构造左奇异向量</h2>
+          <section class="chapter" id="sec-6-4">
+            <h2>6.4 构造左奇异向量</h2>
             <p>由</p>
             <div class="math">$$A^*Av_i=\sigma_i^2v_i,$$</div>
             <p>可得</p>
@@ -867,8 +1012,8 @@
             <div class="math">$$U=[u_1,\cdots,u_m].$$</div>
           </section>
 
-          <section class="chapter" id="sec-5-5">
-            <h2>5.5 SVD 公式</h2>
+          <section class="chapter" id="sec-6-5">
+            <h2>6.5 SVD 公式</h2>
             <p>由</p>
             <div class="math">$$Av_i=\sigma_i u_i,$$</div>
             <p>写成矩阵形式：</p>
@@ -878,8 +1023,8 @@
             <p>这就是奇异值分解。</p>
           </section>
 
-          <section class="chapter" id="sec-5-6">
-            <h2>5.6 SVD 的几何意义</h2>
+          <section class="chapter" id="sec-6-6">
+            <h2>6.6 SVD 的几何意义</h2>
             <p>对于任意向量 \(x\)，有</p>
             <div class="math">$$Ax=U\Sigma V^*x.$$</div>
             <p>因此矩阵作用可分解为三个步骤：</p>
@@ -891,8 +1036,8 @@
             <div class="conclusion">任意矩阵 = 旋转 + 伸缩 + 旋转</div>
           </section>
 
-          <section class="chapter" id="sec-5-7">
-            <h2>5.7 SVD 的本质</h2>
+          <section class="chapter" id="sec-6-7">
+            <h2>6.7 SVD 的本质</h2>
             <p>特征值研究</p>
             <div class="math">$$Av=\lambda v,$$</div>
             <p>关注：哪些方向作用后仍保持原方向。</p>
@@ -905,22 +1050,22 @@
           </section>
         </section>
 
-        <section class="part" id="part-6">
+        <section class="part" id="part-7">
           <div class="part-heading">
-            <span class="part-badge">Part VI</span>
+            <span class="part-badge">Part VII</span>
             <h1>三种分解的统一视角</h1>
           </div>
           <p class="part-lead">Jordan、谱分解与 SVD 研究的是同一个线性变换，只是切入角度不同。</p>
 
-          <section class="chapter" id="sec-6-1">
-            <h2>6.1 三种理论研究的是同一个对象</h2>
+          <section class="chapter" id="sec-7-1">
+            <h2>7.1 三种理论研究的是同一个对象</h2>
             <p>三者都在研究</p>
             <div class="math">$$A:\mathbb C^n\to\mathbb C^n,$$</div>
             <p>这个线性变换。区别在于研究角度不同。</p>
           </section>
 
-          <section class="chapter" id="sec-6-2">
-            <h2>6.2 Jordan 型研究什么</h2>
+          <section class="chapter" id="sec-7-2">
+            <h2>7.2 Jordan 型研究什么</h2>
             <p>Jordan 理论从特征值问题出发：</p>
             <div class="math">$$Av=\lambda v.$$</div>
             <p>如果特征向量不足：</p>
@@ -943,8 +1088,8 @@
             <div class="conclusion">Jordan 型描述矩阵的代数结构</div>
           </section>
 
-          <section class="chapter" id="sec-6-3">
-            <h2>6.3 谱分解研究什么</h2>
+          <section class="chapter" id="sec-7-3">
+            <h2>7.3 谱分解研究什么</h2>
             <p>如果矩阵进一步满足正规条件：</p>
             <div class="math">$$AA^*=A^*A,$$</div>
             <p>则存在正交归一特征向量组。</p>
@@ -960,8 +1105,8 @@
             <div class="conclusion">谱分解是 Jordan 理论在正规矩阵上的理想情况</div>
           </section>
 
-          <section class="chapter" id="sec-6-4">
-            <h2>6.4 SVD 研究什么</h2>
+          <section class="chapter" id="sec-7-4">
+            <h2>7.4 SVD 研究什么</h2>
             <p>对于一般矩阵，谱分解可能不存在。</p>
             <p>但 \(A^*A\) 一定是 Hermite 半正定矩阵，因此一定可以谱分解：</p>
             <div class="math">$$A^*A=V\Sigma^2V^*.$$</div>
@@ -975,8 +1120,8 @@
             <div class="conclusion">SVD 描述矩阵的几何伸缩结构</div>
           </section>
 
-          <section class="chapter" id="sec-6-5">
-            <h2>6.5 三者的关系</h2>
+          <section class="chapter" id="sec-7-5">
+            <h2>7.5 三者的关系</h2>
             <p>Jordan：</p>
             <div class="math">$$A=PJP^{-1},$$</div>
             <p>研究矩阵本身。</p>
@@ -1005,8 +1150,8 @@
 $$</div>
           </section>
 
-          <section class="chapter" id="sec-6-6">
-            <h2>6.6 最核心的总结</h2>
+          <section class="chapter" id="sec-7-6">
+            <h2>7.6 最核心的总结</h2>
             <div class="conclusion">Jordan 看方向之间如何耦合</div>
             <div class="conclusion">谱分解看特征方向上的伸缩</div>
             <div class="conclusion">SVD 看长度被拉伸多少</div>
@@ -1032,7 +1177,7 @@ $$</div>
             <li><a href="https://chatgpt.com/s/t_6aa2456564288191b104ca244de48dc8" target="_blank" rel="noreferrer">Jordan 理论笔记</a></li>
             <li><a href="https://chatgpt.com/s/t_6aa25f9182b4819186ba6aac07709bc1" target="_blank" rel="noreferrer">线性变换、换基、相似变换、Jordan 分解与谱分解笔记</a></li>
           </ol>
-          <p class="muted">作者：Joshua · 时间：2026年9月10日</p>
+          <p class="muted">作者：Joshua · 时间：2026年9月11日</p>
         </footer>
       </div>
     </main>
