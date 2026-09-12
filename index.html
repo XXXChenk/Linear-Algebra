@@ -16,6 +16,10 @@
   </style>
 </head>
 <body>
-  <iframe src="linear-algebra-notes.html" title="线性代数整合笔记"></iframe>
+  <iframe id="notesFrame" src="linear-algebra-notes.html" title="线性代数整合笔记"></iframe>
+  <script>
+    document.getElementById("notesFrame").src =
+      "linear-algebra-notes.html?v=" + Date.now();
+  </script>
 </body>
 </html>
